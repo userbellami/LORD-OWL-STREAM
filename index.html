@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LORD OWL STREAM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050b17">
+<link rel="manifest" href="manifest.json">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;background:#050b17;color:#fff;overflow-x:hidden}
+.ice{position:fixed;top:-10%;width:6px;height:6px;background:rgba(180,220,255,.9);border-radius:50%;animation:fall linear infinite}
+@keyframes fall{to{transform:translateY(120vh);opacity:0}}
+header{background:linear-gradient(90deg,#000,#0a1a33);padding:15px;border-bottom:2px solid #1f3b6e;position:sticky;top:0;z-index:10}
+header h1{color:#00b7ff;letter-spacing:2px}
+nav a{color:#ddd;margin-right:15px;text-decoration:none;font-weight:bold}
+nav a:hover{color:#00b7ff}
+.ticker{background:#000;color:#00b7ff;padding:8px;overflow:hidden;white-space:nowrap}
+.ticker span{display:inline-block;padding-left:0;animation:scroll 18s linear infinite}
+@keyframes scroll{to{transform:translateX(-100%)}}
+section{padding:20px}
+h2{color:#00b7ff;border-left:4px solid #00b7ff;padding-left:10px;margin-bottom:12px}
+.card{background:linear-gradient(180deg,#0b162e,#060d1d);padding:15px;border-radius:12px;box-shadow:0 0 15px rgba(0,183,255,.15);margin-bottom:20px}
+iframe{width:100%;height:230px;border:none;border-radius:10px}
+#commentary .comment{border-bottom:1px solid #1f3b6e;padding:6px 0}
+#chat{background:#000;padding:10px;border-radius:10px}
+#messages{height:150px;overflow-y:auto;border:1px solid #1f3b6e;padding:8px;margin-bottom:8px}
+input,button{padding:8px;border:none;border-radius:6px}
+button{background:#00b7ff;color:#000;font-weight:bold}
+footer{background:#000;padding:20px;color:#aaa}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px}
+footer h3{color:#00b7ff;font-size:16px;margin-bottom:8px}
+footer a{color:#aaa;text-decoration:none;display:block;font-size:14px;margin-bottom:5px}
+footer a:hover{color:#00b7ff}
+.copy{text-align:center;margin-top:15px;font-size:13px;color:#777}
+</style>
+</head>
+<body>
+
+<script>
+// Falling ice effect
+for(let i=0;i<70;i++){
+ let d=document.createElement("div");
+ d.className="ice";
+ d.style.left=Math.random()*100+"vw";
+ d.style.animationDuration=3+Math.random()*5+"s";
+ d.style.opacity=Math.random();
+ document.body.appendChild(d);
+}
+</script>
+
+<header>
+<h1>🦉 LORD OWL STREAM</h1>
+<nav>
+<a href="#live">LIVE</a>
+<a href="#official">OFFICIAL</a>
+<a href="#commentary">COMMENTARY</a>
+<a href="#stats">STATS</a>
+<a href="#chatbox">CHAT</a>
+</nav>
+</header>
+
+<div class="ticker">
+<span id="tickerText">⚽ BREAKING: Live scores • Official free matches • Stats & commentary • LORD OWL STREAM ❄️</span>
+</div>
+
+<section id="live">
+<h2>⚽ LIVE SCORES</h2>
+<div class="card">
+<iframe src="https://www.scorebat.com/embed/livescore/"></iframe>
+</div>
+</section>
+
+<section id="official">
+<h2>📺 OFFICIAL FREE MATCHES</h2>
+<div class="card">
+<iframe src="https://www.youtube.com/embed?listType=search&list=live+football+official"></iframe>
+</div>
+</section>
+
+<section id="commentary">
+<h2>📝 LIVE TEXT COMMENTARY</h2>
+<div class="card" id="commentary"></div>
+</section>
+
+<section id="stats">
+<h2>📊 LEAGUE TABLES & STATS</h2>
+<div class="card">
+<iframe id="statsFrame" src="https://www.scorebat.com/embed/"></iframe>
+</div>
+</section>
+
+<section id="chatbox">
+<h2>💬 FAN CHAT</h2>
+<div class="card" id="chat">
+<div id="messages"></div>
+<input id="msg" placeholder="Type message..." />
+<button onclick="send()">Send</button>
+</div>
+</section>
+
+<footer>
+<div class="footer-grid">
+<div>
+<h3>LORD OWL STREAM</h3>
+<p style="font-size:14px">Legal football platform.</p>
+</div>
+<div>
+<h3>Features</h3>
+<a href="#live">Scores</a>
+<a href="#official">Official Matches</a>
+<a href="#stats">Stats</a>
+</div>
+<div>
+<h3>Legal</h3>
+<a href="#">DMCA</a>
+<a href="#">Privacy</a>
+</div>
+<div>
+<h3>Disclaimer</h3>
+<p style="font-size:13px">No pirated streams hosted.</p>
+</div>
+</div>
+<div class="copy">© 2026 LORD OWL STREAM</div>
+</footer>
+
+<script>
+// Fan chat send function
+function send(){
+ let m=document.getElementById("msg");
+ if(m.value.trim()){
+  const d = document.createElement("div");
+  d.textContent = "Fan: " + m.value;
+  document.getElementById("messages").appendChild(d);
+  m.value="";
+ }
+}
+
+// Auto-updating live commentary
+const commentaryData = [
+ "Kick-off — Match started",
+ "12′ Shot saved",
+ "20′ Goal attempt!",
+ "28′ Corner kick",
+ "34′ Yellow card",
+ "45′ Half-time",
+ "46′ Second half started",
+ "60′ Substitution",
+ "75′ Goal!",
+ "90′ Full-time"
+];
+let commentaryIndex = 0;
+function updateCommentary(){
+ const cDiv = document.getElementById("commentary");
+ if(commentaryIndex < commentaryData.length){
+  const div = document.createElement("div");
+  div.className = "comment";
+  div.textContent = commentaryData[commentaryIndex];
+  cDiv.appendChild(div);
+  commentaryIndex++;
+  cDiv.scrollTop = cDiv.scrollHeight;
+ }
+}
+setInterval(updateCommentary, 15000);
+
+// Auto-updating ticker
+const tickerMessages = [
+ "Live scores updated!",
+ "Official free matches now streaming!",
+ "Player stats refreshed!",
+ "New commentary added!",
+ "LORD OWL STREAM ❄️"
+];
+let tickerIndex = 0;
+function updateTicker(){
+ document.getElementById("tickerText").textContent = tickerMessages[tickerIndex];
+ tickerIndex = (tickerIndex + 1) % tickerMessages.length;
+}
+setInterval(updateTicker, 10000);
+
+// Auto-refresh stats iframe
+const statsDiv = document.getElementById("statsFrame");
+setInterval(()=>{
+ statsDiv.src = "https://www.scorebat.com/embed/?" + new Date().getTime();
+}, 30000);
+
+// Service Worker for PWA
+if("serviceWorker" in navigator){
+ navigator.serviceWorker.register("sw.js");
+}
+</script>
+
+</body>
+</html>

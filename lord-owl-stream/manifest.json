@@ -1,0 +1,9 @@
+{
+  "name": "LORD OWL STREAM",
+  "short_name": "OWL STREAM",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#050b17",
+  "theme_color": "#050b17",
+  "icons": []
+}
