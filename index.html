@@ -35,8 +35,8 @@ footer a:hover{color:#00b7ff}
 </head>
 <body>
 
-<!-- Global Like Button top-left -->
-<div id="globalLike" style="position:fixed; top:10px; left:10px; z-index:1000;">
+<!-- Global Like Button top-right -->
+<div id="globalLike" style="position:fixed; top:10px; right:10px; z-index:1000;">
   <button id="likeBtn" style="padding:6px 12px; background:#00b7ff; color:#000; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">
     ❤️ Like
   </button>
@@ -147,23 +147,35 @@ function send(){
  }
 }
 
-// Global Like button
+// Global Like button (single-like like Facebook, top-right)
 let likeCount = 0;
 const likeBtn = document.getElementById("likeBtn");
 const likeDisplay = document.getElementById("likeCount");
 
-// Load previous likes from localStorage
+// Load total likes
 if(localStorage.getItem("globalLikes")){
- likeCount = parseInt(localStorage.getItem("globalLikes"));
- likeDisplay.textContent = likeCount + " Likes";
+  likeCount = parseInt(localStorage.getItem("globalLikes"));
+  likeDisplay.textContent = likeCount + " Likes";
 }
 
-// Update like count on click
+// Check if visitor already liked
+if(localStorage.getItem("hasLiked") === "true"){
+  likeBtn.disabled = true;
+  likeBtn.style.background = "#555";
+  likeBtn.textContent = "❤️ Liked";
+}
+
+// On click
 likeBtn.addEventListener("click", ()=>{
- likeCount++;
- likeDisplay.textContent = likeCount + " Likes";
- localStorage.setItem("globalLikes", likeCount);
- likeBtn.style.background="#ff4d4d";
+  if(localStorage.getItem("hasLiked") !== "true"){
+    likeCount++;
+    likeDisplay.textContent = likeCount + " Likes";
+    localStorage.setItem("globalLikes", likeCount);
+    localStorage.setItem("hasLiked", "true");
+    likeBtn.style.background="#ff4d4d";
+    likeBtn.textContent = "❤️ Liked";
+    likeBtn.disabled = true;
+  }
 });
 </script>
 
