@@ -7,19 +7,19 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Arial,Helvetica,sans-serif;background:#050b17;color:#fff;overflow-x:hidden}
-.ice{position:fixed;top:-10%;width:6px;height:6px;background:rgba(180,220,255,.9);border-radius:50%;animation:fall linear infinite}
-@keyframes fall{to{transform:translateY(120vh);opacity:0}}
-header{background:linear-gradient(90deg,#000,#0a1a33);padding:15px;border-bottom:2px solid #1f3b6e;position:sticky;top:0;z-index:10}
-header h1{color:#00b7ff;letter-spacing:2px}
-nav a{color:#ddd;margin-right:15px;text-decoration:none;font-weight:bold}
+header{background:linear-gradient(90deg,#000,#0a1a33);padding:15px;position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center}
+header h1{color:#00b7ff;letter-spacing:2px;font-size:20px}
+nav a{color:#ddd;margin-left:15px;text-decoration:none;font-weight:bold}
 nav a:hover{color:#00b7ff}
-.ticker{background:#000;color:#00b7ff;padding:8px;overflow:hidden;white-space:nowrap}
+.ticker{background:#000;color:#00b7ff;padding:8px;overflow:hidden;white-space:nowrap;font-size:14px}
 .ticker span{display:inline-block;padding-left:100%;animation:scroll 18s linear infinite}
 @keyframes scroll{to{transform:translateX(-100%)}}
-section{padding:20px;position:relative}
+section{padding:20px}
 h2{color:#00b7ff;border-left:4px solid #00b7ff;padding-left:10px;margin-bottom:12px}
-.card{background:linear-gradient(180deg,#0b162e,#060d1d);padding:15px;border-radius:12px;box-shadow:0 0 15px rgba(0,183,255,.15);margin-bottom:20px}
-iframe{width:100%;height:230px;border:none;border-radius:10px}
+.card{background:linear-gradient(180deg,#0b162e,#060d1d);padding:10px;border-radius:12px;box-shadow:0 0 15px rgba(0,183,255,.15);margin-bottom:20px;display:inline-block;width:calc(48% - 10px);margin-right:10px;vertical-align:top}
+.card img{width:100%;border-radius:10px}
+.card h3{color:#fff;font-size:16px;margin-top:8px;margin-bottom:4px}
+.card p{font-size:12px;color:#aaa}
 #commentary .comment{border-bottom:1px solid #1f3b6e;padding:6px 0}
 #chat{background:#000;padding:10px;border-radius:10px}
 #messages{height:150px;overflow-y:auto;border:1px solid #1f3b6e;padding:8px;margin-bottom:8px}
@@ -31,16 +31,18 @@ footer h3{color:#00b7ff;font-size:16px;margin-bottom:8px}
 footer a{color:#aaa;text-decoration:none;display:block;font-size:14px;margin-bottom:5px}
 footer a:hover{color:#00b7ff}
 .copy{text-align:center;margin-top:15px;font-size:13px;color:#777}
+/* Responsive */
+@media(max-width:768px){.card{width:100%;margin-right:0;margin-bottom:15px}}
 </style>
 </head>
 <body>
 
-<!-- Top-left watchers & total visitors -->
+<!-- Watchers & visitors -->
 <div id="counters" style="position:fixed; top:10px; left:10px; z-index:1000; color:#00b7ff; font-weight:bold;">
   👁️ Watching: <span id="watchers">0</span> | 🧍 Total: <span id="visitors">0</span>
 </div>
 
-<!-- Global Like Button top-right -->
+<!-- Like button -->
 <div id="globalLike" style="position:fixed; top:10px; right:10px; z-index:1000;">
   <button id="likeBtn" style="padding:6px 12px; background:#00b7ff; color:#000; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">
     ❤️ Like
@@ -48,18 +50,96 @@ footer a:hover{color:#00b7ff}
   <span id="likeCount" style="margin-left:8px; font-weight:bold; color:#00b7ff;">0 Likes</span>
 </div>
 
-<script>
-// Falling ice effect
-for(let i=0;i<70;i++){
- let d=document.createElement("div");
- d.className="ice";
- d.style.left=Math.random()*100+"vw";
- d.style.animationDuration=3+Math.random()*5+"s";
- d.style.opacity=Math.random();
- document.body.appendChild(d);
-}
+<header>
+<h1>🦉 LORD OWL STREAM</h1>
+<nav>
+<a href="#live">Live</a>
+<a href="#official">Official</a>
+<a href="#trending">Trending</a>
+<a href="#stats">Stats</a>
+<a href="#chatbox">Chat</a>
+</nav>
+</header>
 
-// Single-like button (top-right)
+<div class="ticker">
+<span>⚽ BREAKING: Live scores • Official matches • Trending • LORD OWL STREAM ❄️</span>
+</div>
+
+<!-- Live Matches Grid -->
+<section id="live">
+<h2>⚽ LIVE MATCHES</h2>
+<div id="liveMatches">
+  <!-- Example Card -->
+  <div class="card">
+    <img src="https://img.youtube.com/vi/0Zp6ZsY2pQI/maxresdefault.jpg" alt="Match Thumbnail">
+    <h3>Live: Manchester vs Chelsea</h3>
+    <p>Click to watch</p>
+    <iframe src="https://www.youtube.com/embed/0Zp6ZsY2pQI?autoplay=0" allowfullscreen style="width:100%;height:180px;border:none;border-radius:10px;margin-top:5px"></iframe>
+  </div>
+</div>
+</section>
+
+<!-- Trending / Highlights -->
+<section id="trending">
+<h2>🔥 TRENDING</h2>
+<div id="trendingCards" style="white-space:nowrap;overflow-x:auto;">
+  <div class="card" style="display:inline-block">
+    <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg">
+    <h3>Top Highlight 1</h3>
+  </div>
+  <div class="card" style="display:inline-block">
+    <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg">
+    <h3>Top Highlight 2</h3>
+  </div>
+</div>
+</section>
+
+<section id="stats">
+<h2>📊 STATS & COMMENTARY</h2>
+<div class="card" id="commentary">
+<div class="comment">Kick-off — Match started</div>
+<div class="comment">12′ Shot saved</div>
+<div class="comment">34′ Yellow card</div>
+<div class="comment">45′ Half-time</div>
+</div>
+</section>
+
+<section id="chatbox">
+<h2>💬 FAN CHAT</h2>
+<div class="card" id="chat">
+<div id="messages"></div>
+<input id="msg" placeholder="Type message..." />
+<button onclick="send()">Send</button>
+</div>
+</section>
+
+<footer>
+<div class="footer-grid">
+<div>
+<h3>LORD OWL STREAM</h3>
+<p style="font-size:14px">Legal football platform.</p>
+</div>
+<div>
+<h3>Features</h3>
+<a href="#live">Live Matches</a>
+<a href="#trending">Trending</a>
+<a href="#stats">Stats</a>
+</div>
+<div>
+<h3>Legal</h3>
+<a href="#">DMCA</a>
+<a href="#">Privacy</a>
+</div>
+<div>
+<h3>Disclaimer</h3>
+<p style="font-size:13px">No pirated streams hosted.</p>
+</div>
+</div>
+<div class="copy">© 2026 LORD OWL STREAM</div>
+</footer>
+
+<script>
+// Single-like button top-right
 let likeCount = 0;
 const likeBtn = document.getElementById("likeBtn");
 const likeDisplay = document.getElementById("likeCount");
@@ -84,20 +164,7 @@ likeBtn.addEventListener("click", ()=>{
   }
 });
 
-// Increment total visitors once per device
-if(!localStorage.getItem("visited")){
-  fetch("/increment").then(()=>localStorage.setItem("visited","true"));
-}
-
-// WebSocket for live watchers & total visitors
-const ws = new WebSocket(`ws://${location.host}`);
-ws.onmessage = e => {
-  const data = JSON.parse(e.data);
-  document.getElementById("watchers").textContent = data.currentWatchers;
-  document.getElementById("visitors").textContent = data.totalVisitors;
-};
-
-// Chat function
+// Chat
 function send(){
  let m=document.getElementById("msg");
  if(m.value.trim()){
@@ -107,86 +174,19 @@ function send(){
   m.value="";
  }
 }
+
+// Increment visitors
+if(!localStorage.getItem("visited")){
+  fetch("/increment").then(()=>localStorage.setItem("visited","true"));
+}
+
+// WebSocket counters
+const ws = new WebSocket(`ws://${location.host}`);
+ws.onmessage = e => {
+  const data = JSON.parse(e.data);
+  document.getElementById("watchers").textContent = data.currentWatchers;
+  document.getElementById("visitors").textContent = data.totalVisitors;
+};
 </script>
-
-<header>
-<h1>🦉 LORD OWL STREAM</h1>
-<nav>
-<a href="#live">LIVE</a>
-<a href="#official">OFFICIAL</a>
-<a href="#commentary">COMMENTARY</a>
-<a href="#stats">STATS</a>
-<a href="#chatbox">CHAT</a>
-</nav>
-</header>
-
-<div class="ticker">
-<span>⚽ BREAKING: Live scores • Official free matches • Stats & commentary • LORD OWL STREAM ❄️</span>
-</div>
-
-<section id="live">
-<h2>⚽ LIVE SCORES</h2>
-<div class="card">
-<iframe src="https://www.scorebat.com/embed/livescore/" allowfullscreen></iframe>
-</div>
-</section>
-
-<section id="official">
-<h2>📺 OFFICIAL FREE MATCHES</h2>
-<div class="card">
-<iframe src="https://www.scorebat.com/embed/" allowfullscreen></iframe>
-</div>
-</section>
-
-<section id="commentary">
-<h2>📝 LIVE TEXT COMMENTARY</h2>
-<div class="card" id="commentary">
-<div class="comment">Kick-off — Match started</div>
-<div class="comment">12′ Shot saved</div>
-<div class="comment">34′ Yellow card</div>
-<div class="comment">45′ Half-time</div>
-</div>
-</section>
-
-<section id="stats">
-<h2>📊 LEAGUE TABLES & STATS</h2>
-<div class="card">
-<iframe src="https://www.scorebat.com/embed/" allowfullscreen></iframe>
-</div>
-</section>
-
-<section id="chatbox">
-<h2>💬 FAN CHAT</h2>
-<div class="card" id="chat">
-<div id="messages"></div>
-<input id="msg" placeholder="Type message..." />
-<button onclick="send()">Send</button>
-</div>
-</section>
-
-<footer>
-<div class="footer-grid">
-<div>
-<h3>LORD OWL STREAM</h3>
-<p style="font-size:14px">Legal football platform.</p>
-</div>
-<div>
-<h3>Features</h3>
-<a href="#live">Scores</a>
-<a href="#official">Official Matches</a>
-<a href="#stats">Stats</a>
-</div>
-<div>
-<h3>Legal</h3>
-<a href="#">DMCA</a>
-<a href="#">Privacy</a>
-</div>
-<div>
-<h3>Disclaimer</h3>
-<p style="font-size:13px">No pirated streams hosted.</p>
-</div>
-</div>
-<div class="copy">© 2026 LORD OWL STREAM</div>
-</footer>
 </body>
 </html>
