@@ -24,7 +24,7 @@ iframe{width:100%;height:230px;border:none;border-radius:10px}
 #chat{background:#000;padding:10px;border-radius:10px}
 #messages{height:150px;overflow-y:auto;border:1px solid #1f3b6e;padding:8px;margin-bottom:8px}
 input,button{padding:8px;border:none;border-radius:6px}
-button{background:#00b7ff;color:#000;font-weight:bold}
+button{background:#00b7ff;color:#000;font-weight:bold;cursor:pointer}
 footer{background:#000;padding:20px;color:#aaa}
 .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px}
 footer h3{color:#00b7ff;font-size:16px;margin-bottom:8px}
@@ -35,29 +35,26 @@ footer a:hover{color:#00b7ff}
 </head>
 <body>
 
-<!-- Top-left alternative like 🖕 -->
-<div id="altLike" style="position:fixed; top:10px; left:10px; z-index:1000;">
-  <button id="altLikeBtn" style="padding:6px 12px; background:#00b7ff; color:#000; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">
-    🖕 Like
-  </button>
-  <span id="altLikeCount" style="margin-left:8px; font-weight:bold; color:#00b7ff;">0 Likes</span>
-</div>
-
-<!-- Top-right main like ❤️ -->
-<div id="globalLike" style="position:fixed; top:10px; right:10px; z-index:1000;">
-  <button id="likeBtn" style="padding:6px 12px; background:#00b7ff; color:#000; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">
-    ❤️ Like
-  </button>
-  <span id="likeCount" style="margin-left:8px; font-weight:bold; color:#00b7ff;">0 Likes</span>
-</div>
-
-<!-- Top-middle watchers & visitors -->
-<div id="counters" style="position:fixed; top:10px; left:50%; transform:translateX(-50%); z-index:1000; color:#00b7ff; font-weight:bold;">
-  👁️ Watching: <span id="watchers">0</span> | 🧍 Total: <span id="visitors">0</span>
+<!-- Top bar: ❤️ 🖕 Watchers Visitors -->
+<div id="topBar" style="position:fixed; top:10px; left:50%; transform:translateX(-50%); z-index:1000; color:#00b7ff; font-weight:bold; display:flex; gap:20px; align-items:center; background:rgba(0,0,0,0.5); padding:5px 12px; border-radius:8px;">
+  <div>
+    ❤️ <button id="likeBtn" style="padding:4px 8px; background:#00b7ff; color:#000; border:none; border-radius:4px;">Like</button>
+    <span id="likeCount">0</span>
+  </div>
+  <div>
+    🖕 <button id="altLikeBtn" style="padding:4px 8px; background:#00b7ff; color:#000; border:none; border-radius:4px;">Like</button>
+    <span id="altLikeCount">0</span>
+  </div>
+  <div>
+    👁️ Watchers: <span id="watchers">0</span>
+  </div>
+  <div>
+    🧍 Visitors: <span id="visitors">0</span>
+  </div>
 </div>
 
 <script>
-// Falling ice
+// Falling ice effect
 for(let i=0;i<70;i++){
  let d=document.createElement("div");
  d.className="ice";
@@ -67,57 +64,70 @@ for(let i=0;i<70;i++){
  document.body.appendChild(d);
 }
 
-// Main ❤️ Like
+// ❤️ Like button
 let likeCount = 0;
 const likeBtn = document.getElementById("likeBtn");
 const likeDisplay = document.getElementById("likeCount");
-if(localStorage.getItem("globalLikes")){
-  likeCount = parseInt(localStorage.getItem("globalLikes"));
-  likeDisplay.textContent = likeCount + " Likes";
+if(localStorage.getItem("likeCount")) {
+  likeCount = parseInt(localStorage.getItem("likeCount"));
+  likeDisplay.textContent = likeCount;
 }
-if(localStorage.getItem("hasLiked") === "true"){
+if(localStorage.getItem("hasLiked") === "true") {
   likeBtn.disabled = true;
-  likeBtn.style.background = "#555";
-  likeBtn.textContent = "❤️ Liked";
+  likeBtn.style.background="#555";
+  likeBtn.textContent="❤️ Liked";
 }
 likeBtn.addEventListener("click", ()=>{
   if(localStorage.getItem("hasLiked") !== "true"){
     likeCount++;
-    likeDisplay.textContent = likeCount + " Likes";
-    localStorage.setItem("globalLikes", likeCount);
+    likeDisplay.textContent = likeCount;
+    localStorage.setItem("likeCount", likeCount);
     localStorage.setItem("hasLiked", "true");
     likeBtn.style.background="#ff4d4d";
-    likeBtn.textContent = "❤️ Liked";
-    likeBtn.disabled = true;
+    likeBtn.textContent="❤️ Liked";
+    likeBtn.disabled=true;
   }
 });
 
-// Alternative 🖕 Like
+// 🖕 Alternative Like button
 let altLikeCount = 0;
-const altBtn = document.getElementById("altLikeBtn");
-const altDisplay = document.getElementById("altLikeCount");
-if(localStorage.getItem("altLikes")){
-  altLikeCount = parseInt(localStorage.getItem("altLikes"));
-  altDisplay.textContent = altLikeCount + " Likes";
+const altLikeBtn = document.getElementById("altLikeBtn");
+const altLikeDisplay = document.getElementById("altLikeCount");
+if(localStorage.getItem("altLikeCount")) {
+  altLikeCount = parseInt(localStorage.getItem("altLikeCount"));
+  altLikeDisplay.textContent = altLikeCount;
 }
-if(localStorage.getItem("hasAltLiked") === "true"){
-  altBtn.disabled = true;
-  altBtn.style.background = "#555";
-  altBtn.textContent = "🖕 Liked";
+if(localStorage.getItem("hasAltLiked") === "true") {
+  altLikeBtn.disabled = true;
+  altLikeBtn.style.background="#555";
+  altLikeBtn.textContent="🖕 Liked";
 }
-altBtn.addEventListener("click", ()=>{
+altLikeBtn.addEventListener("click", ()=>{
   if(localStorage.getItem("hasAltLiked") !== "true"){
     altLikeCount++;
-    altDisplay.textContent = altLikeCount + " Likes";
-    localStorage.setItem("altLikes", altLikeCount);
+    altLikeDisplay.textContent = altLikeCount;
+    localStorage.setItem("altLikeCount", altLikeCount);
     localStorage.setItem("hasAltLiked", "true");
-    altBtn.style.background="#ff4d4d";
-    altBtn.textContent = "🖕 Liked";
-    altBtn.disabled = true;
+    altLikeBtn.style.background="#ff4d4d";
+    altLikeBtn.textContent="🖕 Liked";
+    altLikeBtn.disabled=true;
   }
 });
 
-// Chat
+// Increment total visitors once per device
+if(!localStorage.getItem("visited")){
+  fetch("/increment").then(()=>localStorage.setItem("visited","true"));
+}
+
+// WebSocket for live watchers & total visitors
+const ws = new WebSocket(`ws://${location.host}`);
+ws.onmessage = e => {
+  const data = JSON.parse(e.data);
+  document.getElementById("watchers").textContent = data.currentWatchers;
+  document.getElementById("visitors").textContent = data.totalVisitors;
+};
+
+// Chat function
 function send(){
  let m=document.getElementById("msg");
  if(m.value.trim()){
@@ -127,17 +137,6 @@ function send(){
   m.value="";
  }
 }
-
-// WS for watchers & visitors
-if(!localStorage.getItem("visited")){
-  fetch("/increment").then(()=>localStorage.setItem("visited","true"));
-}
-const ws = new WebSocket(`ws://${location.host}`);
-ws.onmessage = e => {
-  const data = JSON.parse(e.data);
-  document.getElementById("watchers").textContent = data.currentWatchers;
-  document.getElementById("visitors").textContent = data.totalVisitors;
-};
 </script>
 
 <header>
