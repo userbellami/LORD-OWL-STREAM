@@ -35,12 +35,15 @@ footer a:hover{color:#00b7ff}
 </head>
 <body>
 
-<!-- Top-left watchers & total visitors -->
-<div id="counters" style="position:fixed; top:10px; left:10px; z-index:1000; color:#00b7ff; font-weight:bold;">
-  👁️ Watching: <span id="watchers">0</span> | 🧍 Total: <span id="visitors">0</span>
+<!-- Top-left alternative like 🖕 -->
+<div id="altLike" style="position:fixed; top:10px; left:10px; z-index:1000;">
+  <button id="altLikeBtn" style="padding:6px 12px; background:#00b7ff; color:#000; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">
+    🖕 Like
+  </button>
+  <span id="altLikeCount" style="margin-left:8px; font-weight:bold; color:#00b7ff;">0 Likes</span>
 </div>
 
-<!-- Global Like Button top-right -->
+<!-- Top-right main like ❤️ -->
 <div id="globalLike" style="position:fixed; top:10px; right:10px; z-index:1000;">
   <button id="likeBtn" style="padding:6px 12px; background:#00b7ff; color:#000; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">
     ❤️ Like
@@ -48,8 +51,13 @@ footer a:hover{color:#00b7ff}
   <span id="likeCount" style="margin-left:8px; font-weight:bold; color:#00b7ff;">0 Likes</span>
 </div>
 
+<!-- Top-middle watchers & visitors -->
+<div id="counters" style="position:fixed; top:10px; left:50%; transform:translateX(-50%); z-index:1000; color:#00b7ff; font-weight:bold;">
+  👁️ Watching: <span id="watchers">0</span> | 🧍 Total: <span id="visitors">0</span>
+</div>
+
 <script>
-// Falling ice effect
+// Falling ice
 for(let i=0;i<70;i++){
  let d=document.createElement("div");
  d.className="ice";
@@ -59,7 +67,7 @@ for(let i=0;i<70;i++){
  document.body.appendChild(d);
 }
 
-// Single-like button (top-right)
+// Main ❤️ Like
 let likeCount = 0;
 const likeBtn = document.getElementById("likeBtn");
 const likeDisplay = document.getElementById("likeCount");
@@ -84,20 +92,32 @@ likeBtn.addEventListener("click", ()=>{
   }
 });
 
-// Increment total visitors once per device
-if(!localStorage.getItem("visited")){
-  fetch("/increment").then(()=>localStorage.setItem("visited","true"));
+// Alternative 🖕 Like
+let altLikeCount = 0;
+const altBtn = document.getElementById("altLikeBtn");
+const altDisplay = document.getElementById("altLikeCount");
+if(localStorage.getItem("altLikes")){
+  altLikeCount = parseInt(localStorage.getItem("altLikes"));
+  altDisplay.textContent = altLikeCount + " Likes";
 }
+if(localStorage.getItem("hasAltLiked") === "true"){
+  altBtn.disabled = true;
+  altBtn.style.background = "#555";
+  altBtn.textContent = "🖕 Liked";
+}
+altBtn.addEventListener("click", ()=>{
+  if(localStorage.getItem("hasAltLiked") !== "true"){
+    altLikeCount++;
+    altDisplay.textContent = altLikeCount + " Likes";
+    localStorage.setItem("altLikes", altLikeCount);
+    localStorage.setItem("hasAltLiked", "true");
+    altBtn.style.background="#ff4d4d";
+    altBtn.textContent = "🖕 Liked";
+    altBtn.disabled = true;
+  }
+});
 
-// WebSocket for live watchers & total visitors
-const ws = new WebSocket(`ws://${location.host}`);
-ws.onmessage = e => {
-  const data = JSON.parse(e.data);
-  document.getElementById("watchers").textContent = data.currentWatchers;
-  document.getElementById("visitors").textContent = data.totalVisitors;
-};
-
-// Chat function
+// Chat
 function send(){
  let m=document.getElementById("msg");
  if(m.value.trim()){
@@ -107,6 +127,17 @@ function send(){
   m.value="";
  }
 }
+
+// WS for watchers & visitors
+if(!localStorage.getItem("visited")){
+  fetch("/increment").then(()=>localStorage.setItem("visited","true"));
+}
+const ws = new WebSocket(`ws://${location.host}`);
+ws.onmessage = e => {
+  const data = JSON.parse(e.data);
+  document.getElementById("watchers").textContent = data.currentWatchers;
+  document.getElementById("visitors").textContent = data.totalVisitors;
+};
 </script>
 
 <header>
