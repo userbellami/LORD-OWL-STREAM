@@ -4,43 +4,19 @@
 <meta charset="UTF-8">
 <title>LORD OWL STREAM</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050b17">
-<link rel="manifest" href="manifest.json">
-
-<!-- Splash screen meta -->
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="LORD OWL STREAM">
-<link rel="apple-touch-icon" href="icon-192.png">
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Arial,Helvetica,sans-serif;background:#050b17;color:#fff;overflow-x:hidden}
-
-/* Splash overlay */
-#splash{position:fixed;top:0;left:0;width:100%;height:100%;background:#050b17;display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:2000;overflow:hidden}
-#splashLogo{width:120px;animation:owlFly 2s ease-out forwards;opacity:0}
-@keyframes owlFly{0%{transform:translateY(-100px) scale(0.5);opacity:0}50%{transform:translateY(20px) scale(1.2);opacity:1}100%{transform:translateY(0) scale(1)}}
-.splashIce{position:absolute;top:-10%;width:6px;height:6px;background:rgba(180,220,255,.9);border-radius:50%;animation:fallSplash linear infinite}
-@keyframes fallSplash{to{transform:translateY(120vh);opacity:0}}
-
-/* Main ice effect */
 .ice{position:fixed;top:-10%;width:6px;height:6px;background:rgba(180,220,255,.9);border-radius:50%;animation:fall linear infinite}
 @keyframes fall{to{transform:translateY(120vh);opacity:0}}
-
-/* Header & nav */
 header{background:linear-gradient(90deg,#000,#0a1a33);padding:15px;border-bottom:2px solid #1f3b6e;position:sticky;top:0;z-index:10}
 header h1{color:#00b7ff;letter-spacing:2px}
 nav a{color:#ddd;margin-right:15px;text-decoration:none;font-weight:bold}
 nav a:hover{color:#00b7ff}
-
-/* Ticker */
 .ticker{background:#000;color:#00b7ff;padding:8px;overflow:hidden;white-space:nowrap}
-.ticker span{display:inline-block;padding-left:0;animation:scroll 18s linear infinite}
+.ticker span{display:inline-block;padding-left:100%;animation:scroll 18s linear infinite}
 @keyframes scroll{to{transform:translateX(-100%)}}
-
-/* Sections */
-section{padding:20px}
+section{padding:20px;position:relative}
 h2{color:#00b7ff;border-left:4px solid #00b7ff;padding-left:10px;margin-bottom:12px}
 .card{background:linear-gradient(180deg,#0b162e,#060d1d);padding:15px;border-radius:12px;box-shadow:0 0 15px rgba(0,183,255,.15);margin-bottom:20px}
 iframe{width:100%;height:230px;border:none;border-radius:10px}
@@ -49,34 +25,35 @@ iframe{width:100%;height:230px;border:none;border-radius:10px}
 #messages{height:150px;overflow-y:auto;border:1px solid #1f3b6e;padding:8px;margin-bottom:8px}
 input,button{padding:8px;border:none;border-radius:6px}
 button{background:#00b7ff;color:#000;font-weight:bold}
-
-/* Footer */
 footer{background:#000;padding:20px;color:#aaa}
 .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px}
 footer h3{color:#00b7ff;font-size:16px;margin-bottom:8px}
 footer a{color:#aaa;text-decoration:none;display:block;font-size:14px;margin-bottom:5px}
 footer a:hover{color:#00b7ff}
 .copy{text-align:center;margin-top:15px;font-size:13px;color:#777}
-
-/* Install banner */
-#installBanner{display:none;position:fixed;top:0;left:0;width:100%;background:#00b7ff;color:#000;padding:12px;text-align:center;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.3);}
-#installBanner button{margin-left:10px;padding:6px 12px;background:#000;color:#00b7ff;border:none;border-radius:5px;cursor:pointer;}
-#installBanner span{margin-left:15px;cursor:pointer;font-weight:bold;}
 </style>
 </head>
 <body>
 
-<!-- Splash Screen -->
-<div id="splash">
-  <img src="icon-512.png" alt="OWL LOGO" id="splashLogo">
+<!-- Global Like Button top-left -->
+<div id="globalLike" style="position:fixed; top:10px; left:10px; z-index:1000;">
+  <button id="likeBtn" style="padding:6px 12px; background:#00b7ff; color:#000; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">
+    ❤️ Like
+  </button>
+  <span id="likeCount" style="margin-left:8px; font-weight:bold; color:#00b7ff;">0 Likes</span>
 </div>
 
-<!-- Install Banner -->
-<div id="installBanner">
-📲 Download LORD OWL STREAM App
-<button id="installBtn">Install</button>
-<span id="dismissBanner">✖</span>
-</div>
+<script>
+// Falling ice effect
+for(let i=0;i<70;i++){
+ let d=document.createElement("div");
+ d.className="ice";
+ d.style.left=Math.random()*100+"vw";
+ d.style.animationDuration=3+Math.random()*5+"s";
+ d.style.opacity=Math.random();
+ document.body.appendChild(d);
+}
+</script>
 
 <header>
 <h1>🦉 LORD OWL STREAM</h1>
@@ -89,26 +66,39 @@ footer a:hover{color:#00b7ff}
 </nav>
 </header>
 
-<div class="ticker"><span id="tickerText">⚽ BREAKING: Live scores • Official free matches • Stats & commentary • LORD OWL STREAM ❄️</span></div>
+<div class="ticker">
+<span>⚽ BREAKING: Live scores • Official free matches • Stats & commentary • LORD OWL STREAM ❄️</span>
+</div>
 
 <section id="live">
 <h2>⚽ LIVE SCORES</h2>
-<div class="card"><iframe src="https://www.scorebat.com/embed/livescore/"></iframe></div>
+<div class="card">
+<iframe src="https://www.scorebat.com/embed/livescore/" allowfullscreen></iframe>
+</div>
 </section>
 
 <section id="official">
 <h2>📺 OFFICIAL FREE MATCHES</h2>
-<div class="card"><iframe src="https://www.youtube.com/embed?listType=search&list=live+football+official"></iframe></div>
+<div class="card">
+<iframe src="https://www.scorebat.com/embed/" allowfullscreen></iframe>
+</div>
 </section>
 
 <section id="commentary">
 <h2>📝 LIVE TEXT COMMENTARY</h2>
-<div class="card" id="commentary"></div>
+<div class="card" id="commentary">
+<div class="comment">Kick-off — Match started</div>
+<div class="comment">12′ Shot saved</div>
+<div class="comment">34′ Yellow card</div>
+<div class="comment">45′ Half-time</div>
+</div>
 </section>
 
 <section id="stats">
 <h2>📊 LEAGUE TABLES & STATS</h2>
-<div class="card"><iframe id="statsFrame" src="https://www.scorebat.com/embed/"></iframe></div>
+<div class="card">
+<iframe src="https://www.scorebat.com/embed/" allowfullscreen></iframe>
+</div>
 </section>
 
 <section id="chatbox">
@@ -146,73 +136,35 @@ footer a:hover{color:#00b7ff}
 </footer>
 
 <script>
-// Splash ice effect
-for(let i=0;i<50;i++){
-  const d=document.createElement("div");
-  d.className="splashIce";
-  d.style.left=Math.random()*100+"vw";
-  d.style.animationDuration=2+Math.random()*3+"s";
-  d.style.opacity=Math.random();
-  document.getElementById("splash").appendChild(d);
+// Chat function
+function send(){
+ let m=document.getElementById("msg");
+ if(m.value.trim()){
+  let d=document.createElement("div");
+  d.textContent="Fan: "+m.value;
+  document.getElementById("messages").appendChild(d);
+  m.value="";
+ }
 }
 
-// Remove splash after 3 seconds
-window.addEventListener("load", ()=>{
-  setTimeout(()=>{document.getElementById("splash").style.display="none";},3000);
-});
+// Global Like button
+let likeCount = 0;
+const likeBtn = document.getElementById("likeBtn");
+const likeDisplay = document.getElementById("likeCount");
 
-// Main ice falling effect
-for(let i=0;i<70;i++){
- let d=document.createElement("div");
- d.className="ice";
- d.style.left=Math.random()*100+"vw";
- d.style.animationDuration=3+Math.random()*5+"s";
- d.style.opacity=Math.random();
- document.body.appendChild(d);
+// Load previous likes from localStorage
+if(localStorage.getItem("globalLikes")){
+ likeCount = parseInt(localStorage.getItem("globalLikes"));
+ likeDisplay.textContent = likeCount + " Likes";
 }
 
-// Install banner
-let deferredPrompt;
-const installBanner=document.getElementById("installBanner");
-const installBtn=document.getElementById("installBtn");
-const dismissBanner=document.getElementById("dismissBanner");
-const bannerDismissed=localStorage.getItem("pwaBannerDismissed")==="true";
-
-window.addEventListener('beforeinstallprompt',(e)=>{
-  if(bannerDismissed) return;
-  e.preventDefault();
-  deferredPrompt=e;
-  installBanner.style.display='block';
+// Update like count on click
+likeBtn.addEventListener("click", ()=>{
+ likeCount++;
+ likeDisplay.textContent = likeCount + " Likes";
+ localStorage.setItem("globalLikes", likeCount);
+ likeBtn.style.background="#ff4d4d";
 });
-
-installBtn.addEventListener('click', async()=>{
-  installBanner.style.display='none';
-  localStorage.setItem("pwaBannerDismissed","true");
-  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null});}
-});
-dismissBanner.addEventListener('click',()=>{installBanner.style.display='none';localStorage.setItem("pwaBannerDismissed","true");});
-
-// Fan chat
-function send(){let m=document.getElementById("msg");if(m.value.trim()){const d=document.createElement("div");d.textContent="Fan: "+m.value;document.getElementById("messages").appendChild(d);m.value="";}}
-
-// Auto commentary
-const commentaryData=["Kick-off — Match started","12′ Shot saved","20′ Goal attempt!","28′ Corner kick","34′ Yellow card","45′ Half-time","46′ Second half started","60′ Substitution","75′ Goal!","90′ Full-time"];
-let commentaryIndex=0;
-function updateCommentary(){const cDiv=document.getElementById("commentary");if(commentaryIndex<commentaryData.length){const div=document.createElement("div");div.className="comment";div.textContent=commentaryData[commentaryIndex];cDiv.appendChild(div);commentaryIndex++;cDiv.scrollTop=cDiv.scrollHeight;}}
-setInterval(updateCommentary,15000);
-
-// Ticker updates
-const tickerMessages=["Live scores updated!","Official free matches now streaming!","Player stats refreshed!","New commentary added!","LORD OWL STREAM ❄️"];
-let tickerIndex=0;
-function updateTicker(){document.getElementById("tickerText").textContent=tickerMessages[tickerIndex];tickerIndex=(tickerIndex+1)%tickerMessages.length;}
-setInterval(updateTicker,10000);
-
-// Refresh stats iframe
-const statsDiv=document.getElementById("statsFrame");
-setInterval(()=>{statsDiv.src="https://www.scorebat.com/embed/?"+new Date().getTime()},30000);
-
-// Service worker
-if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}
 </script>
 
 </body>
