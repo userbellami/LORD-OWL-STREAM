@@ -1,9 +1,11 @@
 {
   "name": "lord-owl-stream",
   "version": "1.0.0",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
-    "start": "node -e \"require('http').createServer((_,r)=>require('fs').createReadStream('index.html').pipe(r)).listen(process.env.PORT || 8080)\""
+    "start": "node server.js"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ws": "^8.13.0"
+  }
 }

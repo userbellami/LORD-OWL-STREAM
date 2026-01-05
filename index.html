@@ -35,6 +35,11 @@ footer a:hover{color:#00b7ff}
 </head>
 <body>
 
+<!-- Top-left watchers & total visitors -->
+<div id="counters" style="position:fixed; top:10px; left:10px; z-index:1000; color:#00b7ff; font-weight:bold;">
+  👁️ Watching: <span id="watchers">0</span> | 🧍 Total: <span id="visitors">0</span>
+</div>
+
 <!-- Global Like Button top-right -->
 <div id="globalLike" style="position:fixed; top:10px; right:10px; z-index:1000;">
   <button id="likeBtn" style="padding:6px 12px; background:#00b7ff; color:#000; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">
@@ -52,6 +57,55 @@ for(let i=0;i<70;i++){
  d.style.animationDuration=3+Math.random()*5+"s";
  d.style.opacity=Math.random();
  document.body.appendChild(d);
+}
+
+// Single-like button (top-right)
+let likeCount = 0;
+const likeBtn = document.getElementById("likeBtn");
+const likeDisplay = document.getElementById("likeCount");
+if(localStorage.getItem("globalLikes")){
+  likeCount = parseInt(localStorage.getItem("globalLikes"));
+  likeDisplay.textContent = likeCount + " Likes";
+}
+if(localStorage.getItem("hasLiked") === "true"){
+  likeBtn.disabled = true;
+  likeBtn.style.background = "#555";
+  likeBtn.textContent = "❤️ Liked";
+}
+likeBtn.addEventListener("click", ()=>{
+  if(localStorage.getItem("hasLiked") !== "true"){
+    likeCount++;
+    likeDisplay.textContent = likeCount + " Likes";
+    localStorage.setItem("globalLikes", likeCount);
+    localStorage.setItem("hasLiked", "true");
+    likeBtn.style.background="#ff4d4d";
+    likeBtn.textContent = "❤️ Liked";
+    likeBtn.disabled = true;
+  }
+});
+
+// Increment total visitors once per device
+if(!localStorage.getItem("visited")){
+  fetch("/increment").then(()=>localStorage.setItem("visited","true"));
+}
+
+// WebSocket for live watchers & total visitors
+const ws = new WebSocket(`ws://${location.host}`);
+ws.onmessage = e => {
+  const data = JSON.parse(e.data);
+  document.getElementById("watchers").textContent = data.currentWatchers;
+  document.getElementById("visitors").textContent = data.totalVisitors;
+};
+
+// Chat function
+function send(){
+ let m=document.getElementById("msg");
+ if(m.value.trim()){
+  let d=document.createElement("div");
+  d.textContent="Fan: "+m.value;
+  document.getElementById("messages").appendChild(d);
+  m.value="";
+ }
 }
 </script>
 
@@ -134,50 +188,5 @@ for(let i=0;i<70;i++){
 </div>
 <div class="copy">© 2026 LORD OWL STREAM</div>
 </footer>
-
-<script>
-// Chat function
-function send(){
- let m=document.getElementById("msg");
- if(m.value.trim()){
-  let d=document.createElement("div");
-  d.textContent="Fan: "+m.value;
-  document.getElementById("messages").appendChild(d);
-  m.value="";
- }
-}
-
-// Global Like button (single-like like Facebook, top-right)
-let likeCount = 0;
-const likeBtn = document.getElementById("likeBtn");
-const likeDisplay = document.getElementById("likeCount");
-
-// Load total likes
-if(localStorage.getItem("globalLikes")){
-  likeCount = parseInt(localStorage.getItem("globalLikes"));
-  likeDisplay.textContent = likeCount + " Likes";
-}
-
-// Check if visitor already liked
-if(localStorage.getItem("hasLiked") === "true"){
-  likeBtn.disabled = true;
-  likeBtn.style.background = "#555";
-  likeBtn.textContent = "❤️ Liked";
-}
-
-// On click
-likeBtn.addEventListener("click", ()=>{
-  if(localStorage.getItem("hasLiked") !== "true"){
-    likeCount++;
-    likeDisplay.textContent = likeCount + " Likes";
-    localStorage.setItem("globalLikes", likeCount);
-    localStorage.setItem("hasLiked", "true");
-    likeBtn.style.background="#ff4d4d";
-    likeBtn.textContent = "❤️ Liked";
-    likeBtn.disabled = true;
-  }
-});
-</script>
-
 </body>
 </html>
