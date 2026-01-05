@@ -5,7 +5,8 @@ const WebSocket = require("ws");
 
 let totalVisitors = 0;
 let currentWatchers = 0;
-const filePath = path.join(__dirname,"visitors.json");
+
+const filePath = path.join(__dirname, "visitors.json");
 if(fs.existsSync(filePath)){
   const data = JSON.parse(fs.readFileSync(filePath,"utf8"));
   totalVisitors = data.totalVisitors || 0;
@@ -22,6 +23,7 @@ const server = http.createServer((req,res)=>{
   fs.createReadStream("index.html").pipe(res);
 });
 
+// WebSocket server
 const wss = new WebSocket.Server({server});
 function broadcastCounters(){
   const data = JSON.stringify({currentWatchers,totalVisitors});
@@ -29,7 +31,6 @@ function broadcastCounters(){
     if(client.readyState===WebSocket.OPEN) client.send(data);
   });
 }
-
 wss.on("connection", ws=>{
   currentWatchers++;
   broadcastCounters();
@@ -39,4 +40,4 @@ wss.on("connection", ws=>{
   });
 });
 
-server.listen(process.env.PORT || 8080, ()=>console.log("Server running on port",server.address().port));
+server.listen(process.env.PORT || 8080, ()=>console.log("Server running on port", server.address().port));
